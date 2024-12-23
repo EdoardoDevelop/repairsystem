@@ -9,7 +9,7 @@ class tabellaClienti extends Migration
     public function up()
     {
         $db = \Config\Database::connect();
-        if (!$this->db->tableExists('schede')) {
+        if (!$this->db->tableExists('clienti')) {
             $this->forge->addField([
                 'id' => [
                     'type'           => 'INT',
@@ -49,6 +49,8 @@ class tabellaClienti extends Migration
 
             // Creare la tabella
             $this->forge->createTable('clienti');
+            // Aggiungere manualmente il valore di default per creato_il
+            $db->query("ALTER TABLE clienti MODIFY creato_il DATETIME DEFAULT CURRENT_TIMESTAMP");
         }
     }
 
@@ -58,3 +60,4 @@ class tabellaClienti extends Migration
         $this->forge->dropTable('clienti');
     }
 }
+

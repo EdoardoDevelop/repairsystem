@@ -17,13 +17,8 @@ class tabellaSchede extends Migration
                     'unsigned'       => true,
                     'auto_increment' => true,
                 ],
-                'nome' => [
-                    'type'       => 'VARCHAR',
-                    'constraint' => '255',
-                ],
-                'telefono' => [
-                    'type'       => 'VARCHAR',
-                    'constraint' => '15',
+                'id_cliente' => [
+                    'type'       => 'INT',
                 ],
                 'tipo_dispositivo' => [
                     'type'       => 'VARCHAR',
@@ -55,7 +50,6 @@ class tabellaSchede extends Migration
                 'creato_il' => [
                     'type'    => 'DATETIME',
                     'null'    => true,
-                    'default' => 'CURRENT_TIMESTAMP',
                 ],
                 'data_consegna' => [
                     'type'    => 'DATE',
@@ -65,6 +59,8 @@ class tabellaSchede extends Migration
 
             $this->forge->addKey('id', true); // Chiave primaria
             $this->forge->createTable('schede');
+            // Aggiungere manualmente il valore di default per creato_il
+            $db->query("ALTER TABLE schede MODIFY creato_il DATETIME DEFAULT CURRENT_TIMESTAMP");
         }
     }
 

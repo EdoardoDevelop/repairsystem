@@ -18,7 +18,7 @@
                 <?php foreach ($dati as $riparazione): ?>
                 <tr>
                     <td><?= $riparazione['id']; ?></td>
-                    <td><?= $riparazione['nome']; ?></td>
+                    <td><?= $riparazione['cliente_nome']; ?></td>
                     <td><?= $riparazione['telefono']; ?></td>
                     <td><?= $riparazione['tipo_dispositivo']; ?></td>
                     <td><?= $riparazione['data_consegna']; ?></td>

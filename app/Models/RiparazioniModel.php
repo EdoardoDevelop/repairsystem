@@ -9,9 +9,7 @@ class RiparazioniModel extends Model
     protected $table = 'schede';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'nome',
-        'telefono',
-        'email',
+        'id_cliente',
         'tipo_dispositivo',
         'marca',
         'modello',
@@ -23,7 +21,9 @@ class RiparazioniModel extends Model
 
     public function getAll()
     {
-        return $this->findAll();
+        return $this->select('schede.*, clienti.nome AS cliente_nome, clienti.cognome AS cliente_cognome, clienti.telefono, clienti.email')
+            ->join('clienti', 'clienti.id = schede.id_cliente', 'left')
+            ->findAll();
     }
 
 }

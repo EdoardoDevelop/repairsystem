@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\RiparazioniModel;
+use App\Models\ClientiModel;
 
 class Riparazioni extends BaseController
 {
@@ -19,9 +20,7 @@ class Riparazioni extends BaseController
 
         // Recupera i dati dal form
         $data = [
-            'nome' => $this->request->getPost('nome'),
-            'telefono' => $this->request->getPost('telefono'),
-            'email' => $this->request->getPost('email'),
+            'id_cliente' => $this->request->getPost('id_cliente'),
             'tipo_dispositivo' => $this->request->getPost('tipo_dispositivo'),
             'marca' => $this->request->getPost('marca'),
             'modello' => $this->request->getPost('modello'),
@@ -33,7 +32,7 @@ class Riparazioni extends BaseController
 
         // Salva i dati nel database
         if ($riparazioniModel->insert($data)) {
-            return redirect()->to('/inserimento')->with('message', 'Dati salvati con successo!');
+            return redirect()->to('/visualizza-schede')->with('message', 'Dati salvati con successo!');
         } else {
             return redirect()->back()->withInput()->with('error', 'Errore durante il salvataggio dei dati.');
         }
@@ -41,7 +40,7 @@ class Riparazioni extends BaseController
 
     public function visualizzaTutte()
     {
-        $riparazioniModel = new \App\Models\RiparazioniModel();
+        $riparazioniModel = new RiparazioniModel();
         $dati = $riparazioniModel->getAll();
     
         return view('pages/schede_riparazioni', [
@@ -52,27 +51,30 @@ class Riparazioni extends BaseController
     
     public function modificaScheda($id)
     {
-        $riparazioniModel = new \App\Models\RiparazioniModel();
+        $riparazioniModel = new RiparazioniModel();
+        $clientiModel = new ClientiModel();
+
         $dati = $riparazioniModel->find($id);
 
         if (!$dati) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Scheda con ID $id non trovata.");
         }
+        // Recupera il cliente associato alla scheda
+        $cliente = $clientiModel->find($dati['id_cliente']);
 
         return view('pages/modifica_scheda', [
             'title' => 'Modifica Scheda',
             'dati' => $dati,
+            'cliente' => $cliente,
         ]);
     }
 
     public function aggiornaScheda($id)
     {
-        $riparazioniModel = new \App\Models\RiparazioniModel();
+        $riparazioniModel = new RiparazioniModel();
 
         $data = [
-            'nome' => $this->request->getPost('nome'),
-            'telefono' => $this->request->getPost('telefono'),
-            'email' => $this->request->getPost('email'),
+            'id_cliente' => $this->request->getPost('id_cliente'),
             'tipo_dispositivo' => $this->request->getPost('tipo_dispositivo'),
             'marca' => $this->request->getPost('marca'),
             'modello' => $this->request->getPost('modello'),
@@ -90,7 +92,7 @@ class Riparazioni extends BaseController
     }
     public function eliminaScheda($id)
     {
-        $riparazioniModel = new \App\Models\RiparazioniModel();
+        $riparazioniModel = new RiparazioniModel();
     
         // Verifica se il record esiste
         $scheda = $riparazioniModel->find($id);
@@ -107,11 +109,11 @@ class Riparazioni extends BaseController
     }
     public function stampaScheda($id)
     {
-        $riparazioniModel = new \App\Models\RiparazioniModel();
+        $riparazioniModel = new RiparazioniModel();
         $riparazione = $riparazioniModel->find($id);
 
         if (!$riparazione) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("Riparazione con ID $id non trovata.");
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Scheda con ID $id non trovata.");
         }
 
         return view('pages/stampa_scheda', ['riparazione' => $riparazione]);
