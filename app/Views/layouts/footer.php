@@ -1,0 +1,12 @@
+    <!-- Bootstrap core JavaScript-->
+    <script src="<?= base_url('vendor/bootstrap/js/bootstrap.min.js') ?>"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+
+
+    <!-- Custom scripts for all pages-->
+    <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+
+</body>
+</html>
